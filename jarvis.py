@@ -2,6 +2,10 @@ import pyttsx3
 #Answer: https://github.com/KBNLresearch/iromlab/issues/100
 import speech_recognition as sr
 import datetime
+import wikipedia
+import webbrowser
+import os
+import smtplib
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -49,10 +53,74 @@ def takeCommand():
         return "None"
     return query
 
+def sendEmail (to,content):
+    """
+    Function to send Email to an address
+    """
+    server = smtplib.SMTP('smtp.gmail.com',587)
+    server.ehlo()
+    server.starttls()
+    server.login('youremail@gmail.com','your-password') #replace with your email and pass to send
+    server.sendmail('youremail@gmail.com',to,content)
+    server.close()
+
 
 if __name__ == "__main__":  
-    speak("Aditya is a good boy")
     wishMe()
-    takeCommand()
+    while True:
+        query = takeCommand().lower()
+        #logic for executing task based on query
+
+        if 'wikipedia' in query:
+            speak("Searching Wikipedia")
+            query = query.replace("wikipedia","")
+            results = wikipedia.summary(query, sentences=2)
+            speak("According to Wikipedia")
+            print(results)
+            speak(results)
+        
+        elif 'open youtube' in query:
+            webbrowser.open("youtube.com")
+
+        elif 'open google' in query:
+            webbrowser.open("google.com")
+
+        elif 'open stackoverflow' in query:
+            webbrowser.open("stackoverflow.com")
+
+        elif 'play music' in query:
+            music_dir = 'C:\\Users\\Asus\\Music\\DaBaby - KIRK (2019)'
+            songs = os.listdir(music_dir)
+            print(songs)
+            os.startfile(os.path.join(music_dir,songs[4]))
+
+        elif 'the time' in query:
+            strTime = datetime.datetime.now().strftime("%H:%M:%S")
+            speak(f"Sir, the time is {strTime}")
+
+        elif 'open code' in query:
+            codePath = "C:\\Users\\Asus\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
+            os.startfile(codePath)
+
+        elif 'email to' in query:
+            #can create a dictionary with email as values and name as key. (Email to name)
+            try:
+                speak("What should I say?")
+                content = takeCommand()
+                to = "address@gmail.com" #replace with the address to send to
+                sendEmail(to,content)
+                speak("Email has been sent!")
+            except Exception as e:
+                print(e)
+                speak("Sorry. The email can not be sent.")
+
+
+
+
+
+        
+
+    
+    
 
 
