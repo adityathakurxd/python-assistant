@@ -94,6 +94,10 @@ if __name__ == "__main__":
             print(songs)
             os.startfile(os.path.join(music_dir,songs[4]))
 
+        elif 'open spotify' in query:
+            codePath = "C:\\Users\\Asus\\AppData\\Local\\Microsoft\\WindowsApps\\Spotify.exe"
+            os.startfile(codePath)
+
         elif 'the time' in query:
             strTime = datetime.datetime.now().strftime("%H:%M:%S")
             speak(f"Sir, the time is {strTime}")
